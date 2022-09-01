@@ -22,19 +22,57 @@ namespace Lab1
 		// Select line class and create line on mouse clicks inside panel.
 		private void button1_Click(object sender, EventArgs e)
 		{
-			Console.WriteLine("Hello");
+			type = 0;
+		}
+
+		private void RecButton_Click(object sender, EventArgs e)
+		{
+			type = 1;
+		}
+
+		private void EllipButton_Click(object sender, EventArgs e)
+		{
+			type = 2;
 		}
 
 		// Gradient of Red to add to color written to panel.
 		private void trackBar1_ValueChanged(object sender, EventArgs e)
 		{
-			Console.WriteLine(trackBar1.Value);
+			red = RedBar.Value;
+		}
+		// Gradient of Blue to add to color written to panel.
+		private void BlueBar_ValueChanged(object sender, EventArgs e)
+		{
+			blue = BlueBar.Value;
+		}
+		// Gradient of Green to add to color written to panel.
+		private void GreenBar_ValueChanged(object sender, EventArgs e)
+		{
+			green = GreenBar.Value;
 		}
 		
-		// To hold the X and Y points recorded on first click inside panel.
-		int startX, startY;
+		private void RedBar_Scroll(object sender, EventArgs e)
+		{
+			
+		}
 
-		private void panel1_MouseDown(object sender, MouseEventArgs e)
+		private void BlueBar_Scroll(object sender, EventArgs e)
+		{
+			
+		}
+
+		private void GreenBar_Scroll(object sender, EventArgs e)
+		{
+			
+		}
+
+		// To hold the X and Y points recorded on first click inside panel and release.
+		int startX, startY, endX, endY;
+		// To hold switch cases and color values.
+		int type, red, blue, green;
+
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
 		{
 			// Record X and Y point to start creating shape from.
 			startX = e.X;
@@ -43,13 +81,30 @@ namespace Lab1
 
 		private void panel1_MouseUp(object sender, MouseEventArgs e)
 		{
+			// Record X and Y point at end of creating shape.
+			endX = e.X;
+			endY = e.Y;
+
 			// Object to draw a new shape inside the panel.
 			Graphics g = panel1.CreateGraphics();
+			Pen pen = new Pen(Color.FromArgb(red, green, blue));
 
-			Pen pen = new Pen(Color.Red);
-			g.DrawLine(pen, startX, startY, e.X, e.Y);
+			// switch used for buttons
+			switch (type)
+			{
+				case 0:  // draw line                 
+					g.DrawLine(pen, startX, startY, endX, endY);
+					break;
+				case 1:  // draw rectangle
+					g.DrawRectangle(pen, startX, startY, endX - startX, endY - startY);
+					break;
+				case 2:  // draw cirlce
+					g.DrawEllipse(pen, startX, startY, endX - startX, endY - startY);
+					break;
+				default:
+					break;
+			}
 		}
-
 		private void panel1_MouseMove(object sender, MouseEventArgs e)
 		{
 			
