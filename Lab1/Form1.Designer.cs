@@ -44,7 +44,7 @@ namespace Lab1
             // LineButton
             // 
             this.LineButton.Location = new System.Drawing.Point(39, 39);
-            this.LineButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.LineButton.Margin = new System.Windows.Forms.Padding(4);
             this.LineButton.Name = "LineButton";
             this.LineButton.Size = new System.Drawing.Size(100, 28);
             this.LineButton.TabIndex = 0;
@@ -54,41 +54,50 @@ namespace Lab1
             // 
             // RecButton
             // 
-            this.RecButton.Location = new System.Drawing.Point(170, 39);
-            this.RecButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.RecButton.Location = new System.Drawing.Point(147, 39);
+            this.RecButton.Margin = new System.Windows.Forms.Padding(4);
             this.RecButton.Name = "RecButton";
             this.RecButton.Size = new System.Drawing.Size(100, 28);
             this.RecButton.TabIndex = 1;
             this.RecButton.Text = "Rectangle";
             this.RecButton.UseVisualStyleBackColor = true;
+            this.RecButton.Click += new System.EventHandler(this.RecButton_Click);
             // 
             // RedBar
             // 
             this.RedBar.BackColor = System.Drawing.Color.Red;
-            this.RedBar.Location = new System.Drawing.Point(433, 39);
-            this.RedBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.RedBar.Location = new System.Drawing.Point(389, 23);
+            this.RedBar.Margin = new System.Windows.Forms.Padding(4);
+            this.RedBar.Maximum = 255;
             this.RedBar.Name = "RedBar";
-            this.RedBar.Size = new System.Drawing.Size(139, 56);
+            this.RedBar.Size = new System.Drawing.Size(136, 56);
             this.RedBar.TabIndex = 2;
+            this.RedBar.Scroll += new System.EventHandler(this.RedBar_Scroll);
             this.RedBar.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // GreenBar
             // 
             this.GreenBar.BackColor = System.Drawing.Color.Green;
-            this.GreenBar.Location = new System.Drawing.Point(629, 39);
-            this.GreenBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.GreenBar.Location = new System.Drawing.Point(533, 23);
+            this.GreenBar.Margin = new System.Windows.Forms.Padding(4);
+            this.GreenBar.Maximum = 255;
             this.GreenBar.Name = "GreenBar";
-            this.GreenBar.Size = new System.Drawing.Size(139, 56);
+            this.GreenBar.Size = new System.Drawing.Size(129, 56);
             this.GreenBar.TabIndex = 3;
+            this.GreenBar.Scroll += new System.EventHandler(this.GreenBar_Scroll);
+            this.GreenBar.ValueChanged += new System.EventHandler(this.GreenBar_ValueChanged);
             // 
             // BlueBar
             // 
             this.BlueBar.BackColor = System.Drawing.Color.Blue;
-            this.BlueBar.Location = new System.Drawing.Point(829, 39);
-            this.BlueBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.BlueBar.Location = new System.Drawing.Point(670, 23);
+            this.BlueBar.Margin = new System.Windows.Forms.Padding(4);
+            this.BlueBar.Maximum = 255;
             this.BlueBar.Name = "BlueBar";
-            this.BlueBar.Size = new System.Drawing.Size(139, 56);
+            this.BlueBar.Size = new System.Drawing.Size(126, 56);
             this.BlueBar.TabIndex = 5;
+            this.BlueBar.Scroll += new System.EventHandler(this.BlueBar_Scroll);
+            this.BlueBar.ValueChanged += new System.EventHandler(this.BlueBar_ValueChanged);
             // 
             // panel1
             // 
@@ -96,10 +105,10 @@ namespace Lab1
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.panel1.Location = new System.Drawing.Point(39, 87);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Location = new System.Drawing.Point(13, 87);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1009, 460);
+            this.panel1.Size = new System.Drawing.Size(783, 340);
             this.panel1.TabIndex = 6;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
@@ -107,19 +116,20 @@ namespace Lab1
             // 
             // EllipButton
             // 
-            this.EllipButton.Location = new System.Drawing.Point(301, 39);
-            this.EllipButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.EllipButton.Location = new System.Drawing.Point(255, 39);
+            this.EllipButton.Margin = new System.Windows.Forms.Padding(4);
             this.EllipButton.Name = "EllipButton";
             this.EllipButton.Size = new System.Drawing.Size(100, 28);
             this.EllipButton.TabIndex = 7;
             this.EllipButton.Text = "Ellipse";
             this.EllipButton.UseVisualStyleBackColor = true;
+            this.EllipButton.Click += new System.EventHandler(this.EllipButton_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1064, 562);
+            this.ClientSize = new System.Drawing.Size(809, 440);
             this.Controls.Add(this.EllipButton);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.BlueBar);
@@ -127,7 +137,7 @@ namespace Lab1
             this.Controls.Add(this.RedBar);
             this.Controls.Add(this.RecButton);
             this.Controls.Add(this.LineButton);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.RedBar)).EndInit();
