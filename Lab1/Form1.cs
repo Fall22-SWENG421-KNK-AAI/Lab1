@@ -85,29 +85,29 @@ namespace Lab1
 			endX = e.X;
 			endY = e.Y;
 
+			// Set start and end Points
+			Point start = new Point(startX, startY);
+			Point end = new Point(endX, endY);
+			// Create color
+			PenColor pc = new PenColor(red, green, blue);
+
 			// switch used for buttons
 			switch (type)
 			{
 				case 0: // Line
 					// Initialize Line
-					Line line = new Line(panel1, red, green, blue);
-					line.SetStartPoint(startX, startY);
-					line.SetEndPoint(endX, endY);
+					Line line = new Line(panel1, pc, start, end);
 					// Draw line
 					line.DrawColoredShape();
 					break;
 				case 1: // Rectangle
-					Rectangle rect = new Rectangle(panel1, red, green, blue);
-					rect.SetStartPoint(startX, startY);
-					rect.SetEndPoint(endX, endY);
+					Rectangle rect = new Rectangle(panel1, pc, start, end);
 					// Draw rectangle
 					rect.DrawColoredShape();
 					break;
 				case 2:  // Ellipse
 					 // Initialize Ellipse
-					Ellipse ell = new Ellipse(panel1, red, green, blue);
-					ell.SetStartPoint(startX, startY);
-					ell.SetEndPoint(endX, endY);
+					Ellipse ell = new Ellipse(panel1, pc, start, end);
 					// Draw Ellipse
 					ell.DrawColoredShape();
 					break;
@@ -119,6 +119,21 @@ namespace Lab1
 		{
 			
 		}
+	}
+
+	// Struct for color to be used with pen and Shape.
+	public struct PenColor
+	{
+		public PenColor(int r, int g, int b)
+		{
+			Red = r;
+			Green = g;
+			Blue = b;
+		}
+		
+		public int Red { get; }
+		public int Green { get;  }
+		public int Blue { get; }
 	}
 	
 	// The base class that Line, Rectangle, and Ellipse inherit from.
@@ -135,10 +150,13 @@ namespace Lab1
 		// Pen used to draw shapes.
 		protected Pen pen;
 
-		public Shape(Panel p, int red, int green, int blue)
+		public Shape(Panel p, PenColor c, Point start, Point end)
 		{
 			// Set color to be used for drawing.
-			SetColor(red, green, blue);
+			SetColor(c);
+			// Set start and end points for shape.
+			this.start = start;
+			this.end = end;
 			CreatePen();
 			// Create graphics object to place on canvas.
 			CreateGraphic(p);
@@ -190,9 +208,9 @@ namespace Lab1
 		{
 			return color;
 		}
-		public void SetColor(int red, int green, int blue)
+		public void SetColor(PenColor c)
 		{
-			color = Color.FromArgb(red, green, blue);
+			color = Color.FromArgb(c.Red, c.Green, c.Blue);
 		}
 		// Create pen for drawing.
 		public void CreatePen()
@@ -209,7 +227,7 @@ namespace Lab1
 	public class Line : Shape
 	{
 		// Constructor
-		public Line(Panel p, int red, int green, int blue) : base(p, red, green, blue)
+		public Line(Panel p, PenColor c, Point s, Point e) : base(p, c, s, e)
 		{
 			Console.WriteLine("Initializing line.");
 		}
@@ -234,7 +252,7 @@ namespace Lab1
 	public class Rectangle : Shape
 	{
 		// Constructor
-		public Rectangle(Panel p, int red, int green, int blue) : base(p, red, green, blue)
+		public Rectangle(Panel p, PenColor c, Point s, Point e) : base(p, c, s, e)
 		{
 			Console.WriteLine("Initializing rectangle.");
 		}
@@ -254,7 +272,7 @@ namespace Lab1
 	public class Ellipse : Shape
 	{
 		// Constructor
-		public Ellipse(Panel p, int red, int green, int blue) : base(p, red, green, blue)
+		public Ellipse(Panel p, PenColor c, Point s, Point e) : base(p, c, s, e)
 		{
 			Console.WriteLine("Initializing ellipse.");
 		}
