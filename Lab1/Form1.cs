@@ -85,9 +85,6 @@ namespace Lab1
 			endX = e.X;
 			endY = e.Y;
 
-			// Initialize generic shape object.
-			
-
 			// Object to draw a new shape inside the panel.
 			Graphics g = panel1.CreateGraphics();
 			Pen pen = new Pen(Color.FromArgb(red, green, blue));
@@ -118,15 +115,24 @@ namespace Lab1
 	public class Shape
 	{
 		// Raw coordinates of shapes.
-		private int startX, startY, endX, endY;
+		protected Point start, end;
 		// For area calculations of shapes.
 		private double height, width;
 		// To represent the object to be drawn on the screen.
-		private Graphics shape;
+		protected Graphics shape;
 		// Each shape will be drawn with a color.
 		private Color color;
 		// Pen used to draw shapes.
-		private Pen pen;
+		protected Pen pen;
+
+		public Shape(Panel p, int red, int green, int blue)
+		{
+			// Set color to be used for drawing.
+			SetColor(red, green, blue);
+			CreatePen();
+			// Create graphics object to place on canvas.
+			CreateGraphic(p);
+		}
 
 		// Computes area of shape and depends on shape.
 		// Generic action is to return area of rectangle.
@@ -138,17 +144,28 @@ namespace Lab1
 		// each shape will implement.
 		public virtual void DrawColoredShape()
 		{
-			Console.WriteLine("Override me.");
+			Console.WriteLine("Drawing shape.");
+		}
+		// Setter for points to use when drawing shape.
+		public void SetStartPoint(int x, int y)
+		{
+			start.X = x;
+			start.Y = y;
+		}
+		public void SetEndPoint(int x, int y)
+		{
+			end.X = x;
+			end.Y = y;
 		}
 		// Both of the methods below are used to calculate the Area
 		// of shapes.
 		public double GetHeight()
 		{
-			return endY - this.startY;
+			return end.Y - start.Y;
 		}
 		public double GetWidth()
 		{
-			return endX - this.startX;
+			return end.X - start.X;
 		}
 		public void SetHeight()
 		{
@@ -167,10 +184,25 @@ namespace Lab1
 		{
 			color = Color.FromArgb(red, green, blue);
 		}
+		// Create pen for drawing.
+		public void CreatePen()
+		{
+			pen = new Pen(color);
+		}
+		// Create graphic for placing on canvas.
+		public void CreateGraphic(Panel panel)
+		{
+			shape = panel.CreateGraphics();
+		}
 	}
 
 	public class Line : Shape
 	{
+		// Constructor
+		public Line(Panel p, int red, int green, int blue) : base(p, red, green, blue)
+		{
+			Console.WriteLine("Initializing line.");
+		}
 		// Calculate length of line (area of line).
 		public override double Area()
 		{
@@ -181,20 +213,41 @@ namespace Lab1
 			// Line has width of 1 so just return it's length.
 			return c;
 		}
+
+		// Draw Line
+		public override void DrawColoredShape()
+		{
+			shape.DrawLine(pen, start, end);
+		}
 	}
 
 	public class Rectangle : Shape
 	{
+		// Constructor
+		public Rectangle(Panel p, int red, int green, int blue) : base(p, red, green, blue)
+		{
+			Console.WriteLine("Initializing rectangle.");
+		}
 		// Calculate area of rectangular shape.
 		public override double Area()
 		{
 			// Rectangle area formula.
 			return GetHeight() * GetWidth();
 		}
+		// Draw Rectangle
+		public override void DrawColoredShape()
+		{
+			shape.DrawRectangle(pen, start.X, start.Y, (int)GetWidth(), (int)GetHeight());
+		}
 	}
 
 	public class Ellipse : Shape
 	{
+		// Constructor
+		public Ellipse(Panel p, int red, int green, int blue) : base(p, red, green, blue)
+		{
+			Console.WriteLine("Initializing ellipse.");
+		}
 		// Calculate area of elliptical shape.
 		public override double Area()
 		{
@@ -202,6 +255,11 @@ namespace Lab1
 			double halfHeight = GetHeight() / 2;
 			double halfWidth = GetWidth() / 2;
 			return Math.PI * halfHeight * halfWidth;
+		}
+		// Draw Ellipse
+		public override void DrawColoredShape()
+		{
+			shape.DrawEllipse(pen, start.X, start.Y, (int)GetWidth(), (int)GetHeight());
 		}
 	}
 }
