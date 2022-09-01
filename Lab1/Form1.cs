@@ -165,7 +165,7 @@ namespace Lab1
 		}
 		public void SetColor(int red, int green, int blue)
 		{
-			this.color = Color.FromArgb(red, green, blue);
+			color = Color.FromArgb(red, green, blue);
 		}
 	}
 
