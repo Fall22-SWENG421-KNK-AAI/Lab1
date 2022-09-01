@@ -138,4 +138,19 @@ namespace Lab1
 			width = GetWidth();
 		}
 	}
+
+	// Class which implements the Shape interface.
+	public class Line : Shape
+	{
+		// Calculate length of line (area of line).
+		public override double Area()
+		{
+			// Use pythagorean theorem to calculate hypotenuse.
+			// If line is on a slant this will return correct.
+			// If line is vertical or horizontal it will still return correct.
+			double c = Math.Sqrt(Math.Pow(GetHeight(), 2) + Math.Pow(GetWidth(), 2));
+			// Line has width of 1 so just return it's length.
+			return c;
+		}
+	}
 }
