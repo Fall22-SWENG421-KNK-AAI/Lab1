@@ -114,11 +114,22 @@ namespace Lab1
 	// The abstract class that Line, Rectangle, and Ellipse inherit from.
 	public abstract class Shape
 	{
-
+		// Raw coordinates of shapes.
 		private int startX, startY, endX, endY;
+		// For area calculations of shapes.
 		private double height, width;
+		// To represent the object to be drawn on the screen.
+		private Graphics shape;
+		// Each shape will be drawn with a color.
+		private Color color;
+		// Pen used to draw shapes.
+		private Pen pen;
+
 		// Computes area of shape and depends on shape.
 		public abstract double Area();
+		// Required method from lab instructions which
+		// each shape will implement.
+		public abstract void DrawColoredShape();
 		// Both of the methods below are used to calculate the Area
 		// of shapes.
 		public double GetHeight()
@@ -137,13 +148,22 @@ namespace Lab1
 		{
 			width = GetWidth();
 		}
-		// Required method from lab instructions which
-		// each shape will implement.
-		public abstract void drawColoredShape();
+		// Getter and setter for RGB color.
+		public Color GetColor()
+		{
+			return color;
+		}
+		public void SetColor(int red, int green, int blue)
+		{
+			this.color = Color.FromArgb(red, green, blue);
+		}
 	}
 
 	public class Line : Shape
 	{
+		// Constructor to initialize fields.
+		
+		
 		// Calculate length of line (area of line).
 		public override double Area()
 		{
