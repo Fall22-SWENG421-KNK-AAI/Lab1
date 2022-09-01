@@ -72,7 +72,7 @@ namespace Lab1
 		int type, red, blue, green;
 
 
-        private void panel1_MouseDown(object sender, MouseEventArgs e)
+		private void panel1_MouseDown(object sender, MouseEventArgs e)
 		{
 			// Record X and Y point to start creating shape from.
 			startX = e.X;
@@ -108,6 +108,34 @@ namespace Lab1
 		private void panel1_MouseMove(object sender, MouseEventArgs e)
 		{
 			
+		}
+	}
+	
+	// The abstract class that Line, Rectangle, and Ellipse inherit from.
+	public abstract class Shape
+	{
+
+		private int startX, startY, endX, endY;
+		private double height, width;
+		// Computes area of shape and depends on shape.
+		public abstract double Area();
+		// Both of the methods below are used to calculate the Area
+		// of shapes.
+		public double GetHeight()
+		{
+			return endY - this.startY;
+		}
+		public double GetWidth()
+		{
+			return endX - this.startX;
+		}
+		public void SetHeight()
+		{
+			height = GetHeight();
+		}
+		public void SetWidth()
+		{
+			width = GetWidth();
 		}
 	}
 }
