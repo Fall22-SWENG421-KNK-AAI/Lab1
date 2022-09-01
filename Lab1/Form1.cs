@@ -139,7 +139,6 @@ namespace Lab1
 		}
 	}
 
-	// Class which implements the Shape interface.
 	public class Line : Shape
 	{
 		// Calculate length of line (area of line).
@@ -151,6 +150,28 @@ namespace Lab1
 			double c = Math.Sqrt(Math.Pow(GetHeight(), 2) + Math.Pow(GetWidth(), 2));
 			// Line has width of 1 so just return it's length.
 			return c;
+		}
+	}
+
+	public class Rectangle : Shape
+	{
+		// Calculate area of rectangular shape.
+		public override double Area()
+		{
+			// Rectangle area formula.
+			return GetHeight() * GetWidth();
+		}
+	}
+
+	public class Ellipse : Shape
+	{
+		// Calculate area of elliptical shape.
+		public override double Area()
+		{
+			// Ellipse area formula taken from: https://math.hmc.edu/funfacts/area-of-an-ellipse/
+			double halfHeight = GetHeight() / 2;
+			double halfWidth = GetWidth() / 2;
+			return Math.PI * halfHeight * halfWidth;
 		}
 	}
 }
