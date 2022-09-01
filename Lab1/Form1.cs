@@ -85,21 +85,31 @@ namespace Lab1
 			endX = e.X;
 			endY = e.Y;
 
-			// Object to draw a new shape inside the panel.
-			Graphics g = panel1.CreateGraphics();
-			Pen pen = new Pen(Color.FromArgb(red, green, blue));
-
 			// switch used for buttons
 			switch (type)
 			{
-				case 0:  // draw line                 
-					g.DrawLine(pen, startX, startY, endX, endY);
+				case 0: // Line
+					// Initialize Line
+					Line line = new Line(panel1, red, green, blue);
+					line.SetStartPoint(startX, startY);
+					line.SetEndPoint(endX, endY);
+					// Draw line
+					line.DrawColoredShape();
 					break;
-				case 1:  // draw rectangle
-					g.DrawRectangle(pen, startX, startY, endX - startX, endY - startY);
+				case 1: // Rectangle
+					Rectangle rect = new Rectangle(panel1, red, green, blue);
+					rect.SetStartPoint(startX, startY);
+					rect.SetEndPoint(endX, endY);
+					// Draw rectangle
+					rect.DrawColoredShape();
 					break;
-				case 2:  // draw cirlce
-					g.DrawEllipse(pen, startX, startY, endX - startX, endY - startY);
+				case 2:  // Ellipse
+					 // Initialize Ellipse
+					Ellipse ell = new Ellipse(panel1, red, green, blue);
+					ell.SetStartPoint(startX, startY);
+					ell.SetEndPoint(endX, endY);
+					// Draw Ellipse
+					ell.DrawColoredShape();
 					break;
 				default:
 					break;
