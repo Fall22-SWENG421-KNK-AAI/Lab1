@@ -137,6 +137,9 @@ namespace Lab1
 		{
 			width = GetWidth();
 		}
+		// Required method from lab instructions which
+		// each shape will implement.
+		public abstract void drawColoredShape();
 	}
 
 	public class Line : Shape
