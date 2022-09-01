@@ -85,6 +85,9 @@ namespace Lab1
 			endX = e.X;
 			endY = e.Y;
 
+			// Initialize generic shape object.
+			
+
 			// Object to draw a new shape inside the panel.
 			Graphics g = panel1.CreateGraphics();
 			Pen pen = new Pen(Color.FromArgb(red, green, blue));
@@ -111,8 +114,8 @@ namespace Lab1
 		}
 	}
 	
-	// The abstract class that Line, Rectangle, and Ellipse inherit from.
-	public abstract class Shape
+	// The base class that Line, Rectangle, and Ellipse inherit from.
+	public class Shape
 	{
 		// Raw coordinates of shapes.
 		private int startX, startY, endX, endY;
@@ -126,10 +129,17 @@ namespace Lab1
 		private Pen pen;
 
 		// Computes area of shape and depends on shape.
-		public abstract double Area();
+		// Generic action is to return area of rectangle.
+		public virtual double Area()
+		{
+			return height * width;
+		}
 		// Required method from lab instructions which
 		// each shape will implement.
-		public abstract void DrawColoredShape();
+		public virtual void DrawColoredShape()
+		{
+			Console.WriteLine("Override me.");
+		}
 		// Both of the methods below are used to calculate the Area
 		// of shapes.
 		public double GetHeight()
@@ -161,9 +171,6 @@ namespace Lab1
 
 	public class Line : Shape
 	{
-		// Constructor to initialize fields.
-		
-		
 		// Calculate length of line (area of line).
 		public override double Area()
 		{
