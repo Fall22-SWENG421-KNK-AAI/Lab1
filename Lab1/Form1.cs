@@ -66,58 +66,101 @@ namespace Lab1
 			
 		}
 
-		// To hold the X and Y points recorded on first click inside panel and release.
-		int startX, startY, endX, endY;
-		// To hold switch cases and color values.
+		// To hold shape switch statement cases and color values.
 		int type, red, blue, green;
+		// To hold Shape to invoke method for.
+		Shape shape;
 
+		// These two are the image Graphics are drawn onto.
+		Bitmap bg, fg; // bg is current state of panel images.
+			       // fg is new state of panel images.
+		// These are the where shapes are drawn onto.
+		Graphics bgg, fgg; // bgg corresponds to bg Bitmap (current state image).
+				   // fgg corresponds to fg Bitmap (new state image).
+		Point start, end; // point for shape start and end
+		bool down = false; // indicates if mouse is pressed down.
 
+		// Get screen size to make size of buffer for shape drawing.
+		// Found this code here: https://realmpkdotnet.wordpress.com/2014/01/05/get-the-current-screen-size-for-winforms-c/
+		readonly int screenWidth = Screen.PrimaryScreen.Bounds.Width;
+		readonly int screenHeight = Screen.PrimaryScreen.Bounds.Height;
+		
+		// On mouse click, initialize shape, and panel.
 		private void panel1_MouseDown(object sender, MouseEventArgs e)
 		{
-			// Record X and Y point to start creating shape from.
-			startX = e.X;
-			startY = e.Y;
-		}
-
-		private void panel1_MouseUp(object sender, MouseEventArgs e)
-		{
-			// Record X and Y point at end of creating shape.
-			endX = e.X;
-			endY = e.Y;
-
-			// Set start and end Points
-			Point start = new Point(startX, startY);
-			Point end = new Point(endX, endY);
-			// Create color
+			// Record starting Point of cursor when mouse clicked in Panel.
+			start = e.Location;
+			// Save current RGB slider values.
 			PenColor pc = new PenColor(red, green, blue);
-
-			// switch used for buttons
+			// Determine which Shape button has been pressed.
 			switch (type)
 			{
 				case 0: // Line
 					// Initialize Line
-					Line line = new Line(panel1, pc, start, end);
-					// Draw line
-					line.DrawColoredShape();
+					shape = new Line(pc, start);
 					break;
 				case 1: // Rectangle
-					Rectangle rect = new Rectangle(panel1, pc, start, end);
-					// Draw rectangle
-					rect.DrawColoredShape();
+					shape = new Rectangle(pc, start);
 					break;
 				case 2:  // Ellipse
 					 // Initialize Ellipse
-					Ellipse ell = new Ellipse(panel1, pc, start, end);
-					// Draw Ellipse
-					ell.DrawColoredShape();
+					shape = new Ellipse(pc, start);
 					break;
 				default:
 					break;
 			}
+
+			down = true; // Set mouse to down.
+			if (bg == null) // Background on Panel needs to be initialized.
+			{
+				// Set buffers equal to width of monitor.
+				bg = new Bitmap(screenWidth, screenHeight); // Current panel state buffer.
+				fg = new Bitmap(screenWidth, screenHeight); // New panel state buffer.
+
+				// Create current state layer graphic based on the empty Bitmap image bg.
+				bgg = Graphics.FromImage(bg);
+				// C# idiosyncrasy to make sure panel shows blank.
+				bgg.FillRectangle(Brushes.White, 0, 0, screenWidth, screenHeight);
+				// Create new state layer graphic based on empty Bitmap image fg.
+				fgg = Graphics.FromImage(fg);
+			}
 		}
+		// Mouse moving, draw shape along with mouse movements.
 		private void panel1_MouseMove(object sender, MouseEventArgs e)
 		{
-			
+			if (down) // Mouse is pressed down.
+			{
+				// Draw the current image of the background Bitmap to the
+				// foreground Graphics buffer.
+				fgg.DrawImage(bg, 0, 0);
+				// Record current position of mouse cursor.
+				end = e.Location;
+				if (shape != null)
+				{
+					shape.SetEndPoint(end);
+				}
+				// Call polymorphic method to draw appropiate shape in foreground.
+				shape.DrawColoredShape(fgg);
+				// Create a new graphics drawing object to draw with.
+				Graphics g = panel1.CreateGraphics();
+				// Draw the current foreground Bitmap to the new graphics object.
+				g.DrawImage(fg, 0, 0);
+			}
+		}
+		// Mouse released, draw last state of panel to background.
+		private void panel1_MouseUp(object sender, MouseEventArgs e)
+		{
+			down = false; // Mouse click released.
+			if (down == false)
+			{       // Draw most up-to-date image (foreground image fg) Bitmap
+				// to the Background Graphic (making it the most current image).
+				bgg.DrawImage(fg, 0, 0);
+			}
+		}
+		
+		private void Form1_Resize(object sender, EventArgs e)
+		{
+
 		}
 	}
 
@@ -141,49 +184,31 @@ namespace Lab1
 	{
 		// Raw coordinates of shapes.
 		protected Point start, end;
-		// For area calculations of shapes.
-		private double height, width;
-		// To represent the object to be drawn on the screen.
-		protected Graphics shape;
 		// Each shape will be drawn with a color.
 		private Color color;
 		// Pen used to draw shapes.
 		protected Pen pen;
 
-		public Shape(Panel p, PenColor c, Point start, Point end)
+		public Shape(PenColor c, Point start)
 		{
-			// Set color to be used for drawing.
-			SetColor(c);
 			// Set start and end points for shape.
 			this.start = start;
-			this.end = end;
-			CreatePen();
-			// Create graphics object to place on canvas.
-			CreateGraphic(p);
-		}
 
-		// Computes area of shape and depends on shape.
-		// Generic action is to return area of rectangle.
-		public virtual double Area()
-		{
-			return height * width;
+			// Set color to be used for drawing.
+			SetColor(c);
+			CreatePen();
 		}
 		// Required method from lab instructions which
 		// each shape will implement.
-		public virtual void DrawColoredShape()
+		// Draws line by default.
+		public virtual void DrawColoredShape(Graphics g)
 		{
 			Console.WriteLine("Drawing shape.");
 		}
-		// Setter for points to use when drawing shape.
-		public void SetStartPoint(int x, int y)
+		// Setter for end point which is determined after initialization of shape.
+		public void SetEndPoint(Point p)
 		{
-			start.X = x;
-			start.Y = y;
-		}
-		public void SetEndPoint(int x, int y)
-		{
-			end.X = x;
-			end.Y = y;
+			end = p;
 		}
 		// Both of the methods below are used to calculate the Area
 		// of shapes.
@@ -195,19 +220,7 @@ namespace Lab1
 		{
 			return end.X - start.X;
 		}
-		public void SetHeight()
-		{
-			height = GetHeight();
-		}
-		public void SetWidth()
-		{
-			width = GetWidth();
-		}
 		// Getter and setter for RGB color.
-		public Color GetColor()
-		{
-			return color;
-		}
 		public void SetColor(PenColor c)
 		{
 			color = Color.FromArgb(c.Red, c.Green, c.Blue);
@@ -217,77 +230,50 @@ namespace Lab1
 		{
 			pen = new Pen(color);
 		}
-		// Create graphic for placing on canvas.
-		public void CreateGraphic(Panel panel)
-		{
-			shape = panel.CreateGraphics();
-		}
 	}
 
 	public class Line : Shape
 	{
 		// Constructor
-		public Line(Panel p, PenColor c, Point s, Point e) : base(p, c, s, e)
+		public Line(PenColor c, Point s) : base(c, s)
 		{
 			Console.WriteLine("Initializing line.");
 		}
-		// Calculate length of line (area of line).
-		public override double Area()
-		{
-			// Use pythagorean theorem to calculate hypotenuse.
-			// If line is on a slant this will return correct.
-			// If line is vertical or horizontal it will still return correct.
-			double c = Math.Sqrt(Math.Pow(GetHeight(), 2) + Math.Pow(GetWidth(), 2));
-			// Line has width of 1 so just return it's length.
-			return c;
-		}
-
 		// Draw Line
-		public override void DrawColoredShape()
+		public override void DrawColoredShape(Graphics g)
 		{
-			shape.DrawLine(pen, start, end);
+			g.DrawLine(pen, start, end);
 		}
 	}
 
 	public class Rectangle : Shape
 	{
 		// Constructor
-		public Rectangle(Panel p, PenColor c, Point s, Point e) : base(p, c, s, e)
+		public Rectangle(PenColor c, Point s) : base( c, s)
 		{
 			Console.WriteLine("Initializing rectangle.");
 		}
-		// Calculate area of rectangular shape.
-		public override double Area()
+		// Draw Rectangle.
+		// Note: because of how DrawRectangle is implemented, it is only
+		//	 possible to draw down and/or to the right of where the click
+		//	 is initiated.
+		public override void DrawColoredShape(Graphics g)
 		{
-			// Rectangle area formula.
-			return GetHeight() * GetWidth();
-		}
-		// Draw Rectangle
-		public override void DrawColoredShape()
-		{
-			shape.DrawRectangle(pen, start.X, start.Y, (int)GetWidth(), (int)GetHeight());
+			g.DrawRectangle(pen, start.X, start.Y, (int)GetWidth(), (int)GetHeight());
 		}
 	}
 
 	public class Ellipse : Shape
 	{
 		// Constructor
-		public Ellipse(Panel p, PenColor c, Point s, Point e) : base(p, c, s, e)
+		public Ellipse(PenColor c, Point s) : base( c, s)
 		{
 			Console.WriteLine("Initializing ellipse.");
 		}
-		// Calculate area of elliptical shape.
-		public override double Area()
-		{
-			// Ellipse area formula taken from: https://math.hmc.edu/funfacts/area-of-an-ellipse/
-			double halfHeight = GetHeight() / 2;
-			double halfWidth = GetWidth() / 2;
-			return Math.PI * halfHeight * halfWidth;
-		}
 		// Draw Ellipse
-		public override void DrawColoredShape()
+		public override void DrawColoredShape(Graphics g)
 		{
-			shape.DrawEllipse(pen, start.X, start.Y, (int)GetWidth(), (int)GetHeight());
+			g.DrawEllipse(pen, start.X, start.Y, (int)GetWidth(), (int)GetHeight());
 		}
 	}
 }
